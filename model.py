@@ -629,3 +629,138 @@ class Cifar10_BatchNorm(nn.Module):
         x14 = self.convblockC11(x13)
         x14 = x14.view(-1, 10)
         return F.log_softmax(x14, dim=-1)
+
+
+dropout_value = 0.05
+class Cifar10_S9(nn.Module):
+    def __init__(self):
+        super(Cifar10_S9, self).__init__()
+
+        # Input Size 3x32x32
+        # CONVOLUTION BLOCK C1
+        self.convblockC1 = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), dilation=2, padding=2, bias=False), # Dilated
+            nn.ReLU(),
+            nn.BatchNorm2d(32),
+            nn.Dropout(dropout_value)
+        ) # output_size = 32
+
+        # CONVOLUTION BLOCK C2
+        self.convblockC2 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3, 3), dilation=1, padding=1, bias=False, groups=32),  # Depthwise
+            nn.ReLU(),
+            nn.BatchNorm2d(32),
+            nn.Dropout(dropout_value)
+        ) # output_size = 32
+
+        # TRANSITION BLOCK c3
+        self.convblockC3 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), dilation=1, padding=1, stride=2, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(64),
+            nn.Dropout(dropout_value)
+        ) # output_size = 16
+
+        # TRANISTION BLOCK T1
+        self.convblockT1 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
+        ) # output_size = 16
+
+        # CONVOLUTION BLOCK C4
+        self.convblockC4 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(32),
+            nn.Dropout(dropout_value)
+        ) # output_size = 16
+
+        # CONVOLUTION BLOCK C5
+        self.convblockC5 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(32),
+            nn.Dropout(dropout_value)
+        ) # output_size = 16
+
+        # CONVOLUTION BLOCK C6
+        self.convblockC6 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), padding=1, stride=2, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(64),
+            nn.Dropout(dropout_value)
+        ) # output_size = 8
+
+
+          # TRANSITION BLOCK T2
+        self.convblockT2 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=(1, 1), padding=0, bias=False),
+        ) # output_size = 8
+
+
+         # CONVOLUTION BLOCK C7
+        self.convblockC7 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(64),
+            nn.Dropout(dropout_value)
+        ) # output_size = 8
+
+        # CONVOLUTION BLOCK C8
+        self.convblockC8 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3, 3), padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(64),
+            nn.Dropout(dropout_value)
+        ) # output_size = 8
+
+        # CONVOLUTION BLOCK C9
+        self.convblockC9 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3, 3), padding=1, stride=2,  bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(128),
+            nn.Dropout(dropout_value)
+        ) # output_size = 4
+
+
+        # GAP BLOCK
+        self.gap = nn.Sequential(
+            nn.AvgPool2d(kernel_size=4)
+        ) # output_size = 1
+
+        # CONVOLUTION BLOCK C10
+
+        self.convblockC10 = nn.Sequential(
+            nn.Conv2d(in_channels=128, out_channels=10, kernel_size=(1, 1), padding=0, bias=False),
+            # nn.BatchNorm2d(10),
+            # nn.ReLU(),
+            # nn.Dropout(dropout_value)
+        )
+
+
+        self.dropout = nn.Dropout(dropout_value)
+
+    def forward(self, x):
+        x1 = self.convblockC1(x)
+        x2 = self.convblockC2(x1)
+        a = x1+x2
+        x3 = self.convblockC3(a)
+
+        x4 = self.convblockT1(x3)
+
+        x5 = self.convblockC4(x4)
+        x6 = self.convblockC5(x5)
+        b = x5+x6
+        x7 = self.convblockC6(b)
+
+        x8 = self.convblockT2(x7)
+
+        x9 = self.convblockC7(x8)
+        x10 = self.convblockC8(x9)
+        c = x9+x10
+        x11 = self.convblockC9(c)
+
+        x12 = self.gap(x11)
+
+        x13 = self.convblockC10(x12)
+        x14 = x13.view(-1, 10)
+        return F.log_softmax(x14, dim=-1)
