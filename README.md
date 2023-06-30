@@ -12,6 +12,8 @@ Sample images:
 
 ### The model network summary :
 
+Parameters : 186,240
+
 ![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/37c2d611-9d61-40ca-846e-66881bd16fa7)
 
 
