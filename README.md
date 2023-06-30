@@ -21,7 +21,9 @@ Total params: 167,424
 
 ### Results: 
 Train set: Accuracy : 84.45 %
+
 Test set:  Accuracy: 8575/10000 (85.75%)
+
 Epoch : 37
 
 ![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/18301609-b6d7-41dd-87b2-7105d27d01fe)
