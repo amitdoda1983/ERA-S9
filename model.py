@@ -639,7 +639,7 @@ class Cifar10_S9(nn.Module):
         # Input Size 3x32x32
         # CONVOLUTION BLOCK C1
         self.convblockC1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), dilation=2, padding=2, bias=False), # Dilated
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), dilation=1, padding=1, bias=False), 
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value)
@@ -668,7 +668,7 @@ class Cifar10_S9(nn.Module):
 
         # CONVOLUTION BLOCK C4
         self.convblockC4 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=2, dilation=2, bias=False), # Dilated
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value)
@@ -715,9 +715,9 @@ class Cifar10_S9(nn.Module):
 
         # CONVOLUTION BLOCK C9
         self.convblockC9 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3, 3), padding=1, stride=2,  bias=False),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3, 3), padding=1, stride=2,  bias=False),
             nn.ReLU(),
-            nn.BatchNorm2d(128),
+            nn.BatchNorm2d(64),
             nn.Dropout(dropout_value)
         ) # output_size = 4
 
@@ -730,7 +730,7 @@ class Cifar10_S9(nn.Module):
         # CONVOLUTION BLOCK C10
 
         self.convblockC10 = nn.Sequential(
-            nn.Conv2d(in_channels=128, out_channels=10, kernel_size=(1, 1), padding=0, bias=False),
+            nn.Conv2d(in_channels=64, out_channels=10, kernel_size=(1, 1), padding=0, bias=False),
             # nn.BatchNorm2d(10),
             # nn.ReLU(),
             # nn.Dropout(dropout_value)
@@ -762,5 +762,7 @@ class Cifar10_S9(nn.Module):
         x12 = self.gap(x11)
 
         x13 = self.convblockC10(x12)
+        x14 = x13.view(-1, 10)
+        return F.log_softmax(x14, dim=-1)
         x14 = x13.view(-1, 10)
         return F.log_softmax(x14, dim=-1)
