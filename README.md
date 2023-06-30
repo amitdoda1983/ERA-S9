@@ -19,7 +19,7 @@ Sample images:
 Train set: Accuracy : %
 Test set:  Accuracy:  (%)
 
-![image](https://github.com/amitdoda1983/ERA-S8/assets/37932202/c599a620-b093-44de-bc02-b3d12cadc006)
+
 
 
 ### Incorrect predictions samples :
