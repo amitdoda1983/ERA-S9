@@ -10,24 +10,28 @@ Sample images:
 # Model with albumentations , dilated & depthwise_seperable
 
 
-### The model network summary :
+### The model network summary 
 
-Total params: 148,608
+Total params: 167,424
 
-![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/c5cedef2-7f69-4b18-adb4-6c7c77b274f2)
+![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/0f3a4ea2-2401-4590-a796-bc5df4977031)
+
 
 
 
 ### Results: 
-Train set: Accuracy : %
-Test set:  Accuracy:  (%)
+Train set: Accuracy : 84.45 %
+Test set:  Accuracy: 8575/10000 (85.75%)
+Epoch : 37
 
+![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/18301609-b6d7-41dd-87b2-7105d27d01fe)
 
 
 
 ### Incorrect predictions samples :
 
 
+![image](https://github.com/amitdoda1983/ERA-S9/assets/37932202/70a0ce9f-e9b7-45e9-ad4d-9611dcd43102)
 
 
 
